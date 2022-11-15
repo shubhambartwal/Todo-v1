@@ -1,17 +1,42 @@
 const express= require("express");
 const bodyParser= require("body-parser");
-const date=require(__dirname+"/date");
-console.log(date);
+
+const mongoose=require("mongoose");
 const app = express();
 app.set("view engine","ejs");
-app.use(express.static("public"));
-let listItems =["eat","sleep","repeat"];
-let workItems=[];
+app.use(express.static("public")); 
+
+mongoose.connect("mongodb://localhost:27017/todolistDB",{useNewUrlParser:true});
 app.use(bodyParser.urlencoded({extended:true})); 
-app.get("/",function(req,res){
-let day=date.getDate();
-res.render("list",{listTitle: day,newlistItems:listItems});  
+
+const itemSchema={
+    name:String
+}
+const Item= mongoose.model("Item",itemSchema);
+const item1=new Item({
+    name:"Welcome to your todolist!"
 });
+const item2=new Item({
+    name:"Hit + button to add new item!"
+});
+const item3=new Item({
+    name:"Hit - to delete the item !"
+});
+const defaultItems=[item1,item2,item3];
+Item.insertMany(defaultItems,function(err){
+    if(err)
+    {
+        console.log(err);
+    }
+    else{
+        console.log("Successfully default items to database");
+    }
+})
+app.get("/",function(req,res){
+
+res.render("list",{listTitle: "Today",newlistItems:listItems});  
+});
+
 app.post("/",function(req,res){
   let item=req.body.newItem;
   if(req.body.list==="Work List"){
