@@ -8,9 +8,12 @@
 <body>
   <h1><%= listTitle %></h1> 
   <ul>
-    <% for(var i=0;i<newlistItems.length;i++) { %>
-    <li><%= newlistItems[i] %></li>  
-    <% } %>
+    <!-- <% for(var i=0;i<newlistItems.length;i++) { %>
+    <li><%= newlistItems[i].name %></li>  
+    <% } %> -->
+    <% newlistItems.forEach(function(item){ %>
+      <li><%= item.name %></li> %>
+    <% }) %>
   </ul>
   <form  class="" action="/" method="post">
     <input type="text" name="newItem">

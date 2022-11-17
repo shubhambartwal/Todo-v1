@@ -22,6 +22,11 @@ const item2=new Item({
 const item3=new Item({
     name:"Hit - to delete the item !"
 });
+app.get("/",function(req,res){
+Item.find({},function(err,foundItems){
+    if(foundItems.length===0)
+    {
+
 const defaultItems=[item1,item2,item3];
 Item.insertMany(defaultItems,function(err){
     if(err)
@@ -32,9 +37,12 @@ Item.insertMany(defaultItems,function(err){
         console.log("Successfully default items to database");
     }
 })
-app.get("/",function(req,res){
 
-res.render("list",{listTitle: "Today",newlistItems:listItems});  
+    }
+    res.render("list",{listTitle: "Today",newlistItems:foundItems});  
+    console.log(foundItems);
+});
+
 });
 
 app.post("/",function(req,res){
