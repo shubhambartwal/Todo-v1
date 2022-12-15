@@ -40,21 +40,31 @@ Item.insertMany(defaultItems,function(err){
 
     }
     res.render("list",{listTitle: "Today",newlistItems:foundItems});  
-    console.log(foundItems);
+    //console.log(foundItems);
 });
 
 });
 
 app.post("/",function(req,res){
-  let item=req.body.newItem;
-  if(req.body.list==="Work List"){
-    workItems.push(item);
-res.redirect("/Work");  
-}
-else{
-listItems.push(item);
+  const  itemName=req.body.newItem;
+  const item= new Item({name:itemName});
+item.save();
+res.redirect("/");
+});
+app.post("/delete",function(req,res)
+{
+    const checkedItemId=req.body.checkbox;
+   Item.findByIdAndRemove(checkedItemId,function(err){
+    if(err)
+    {
+        console.log(err);
+    }
+    else{
+        console.log("Successfully deleted the item from database");
     res.redirect("/");
-}
+    }
+
+   }); 
 });
 app.get("/Work",function(req,res){
 res.render("list",{listTitle: "Work List",newlistItems:workItems})
